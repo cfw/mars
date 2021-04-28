@@ -56,7 +56,7 @@ func ping(engine *xorm.Engine) error {
 	errCh := make(chan error)
 	go func() {
 		if _, err := engine.Exec(pingCommand); err != nil {
-			log.Errorf("Engine ping error %v" + err.Error())
+			log.Errorf("Engine ping error %v", err.Error())
 			errCh <- err
 			return
 		}
