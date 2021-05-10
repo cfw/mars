@@ -22,7 +22,7 @@ func GrpcStatusError(code int, msg string) error {
 	st, _ = st.WithDetails(br)
 	return st.Err()
 }
-func Convert(err error) (int32, string) {
+func Convert(err error) (int, string) {
 	s := status.Convert(err)
 	var c int
 	var m string
@@ -34,5 +34,5 @@ func Convert(err error) (int32, string) {
 			m = data["message"]
 		}
 	}
-	return int32(c), m
+	return c, m
 }
