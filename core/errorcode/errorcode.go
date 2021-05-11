@@ -12,7 +12,7 @@ type ErrorCode struct {
 	Message string
 }
 
-func From(e ErrorCode) error {
+func Error(e ErrorCode) error {
 	return GrpcStatusError(e.Code, e.Message)
 }
 
