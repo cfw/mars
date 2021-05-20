@@ -8,6 +8,8 @@ import (
 	"time"
 )
 
+// ToMapStr convert struct to map[string][string] for redis hash, if tag is null, key is snake format
+// tag: `map:"key,omitempty"`
 func ToMapStr(in interface{}, fields ...string) (map[string]string, error) {
 	out := make(map[string]string)
 
@@ -28,12 +30,24 @@ func ToMapStr(in interface{}, fields ...string) (map[string]string, error) {
 	t := v.Type()
 	for i := 0; i < v.NumField(); i++ {
 		f := t.Field(i)
-		k := camelToSnake(f.Name)
-		if len(set) == 0 {
-			out[k] = fmt.Sprintf("%v", v.Field(i).Interface())
+		mt := f.Tag.Get("map")
+		var name string
+		var omitempty bool
+		if len(mt) == 0 {
+			name = camelToSnake(f.Name)
+
 		} else {
-			if _, ok := set[k]; ok {
-				out[k] = fmt.Sprintf("%v", v.Field(i).Interface())
+			split := strings.Split(mt, ",")
+			name, omitempty = split[0], split[1] == "omitempty"
+		}
+		if len(set) == 0 {
+			if omitempty && v.Field(i).IsZero() {
+				continue
+			}
+			out[name] = fmt.Sprintf("%v", v.Field(i).Interface())
+		} else {
+			if _, ok := set[name]; ok {
+				out[name] = fmt.Sprintf("%v", v.Field(i).Interface())
 			}
 		}
 	}
