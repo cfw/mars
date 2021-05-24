@@ -35,10 +35,14 @@ func ToMapStr(in interface{}, fields ...string) (map[string]string, error) {
 		var omitempty bool
 		if len(mt) == 0 {
 			name = camelToSnake(f.Name)
-
 		} else {
 			split := strings.Split(mt, ",")
-			name, omitempty = split[0], split[1] == "omitempty"
+			if len(split) > 0 {
+				name = split[0]
+			}
+			if len(split) > 1 {
+				name, omitempty = split[0], split[1] == "omitempty"
+			}
 		}
 		if len(set) == 0 {
 			if omitempty && v.Field(i).IsZero() {
