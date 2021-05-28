@@ -14,7 +14,7 @@ func Ok() *Response {
 
 func OkWithData(data interface{}) *Response {
 	resp := Ok()
-	if data != nil || !reflect.ValueOf(data).IsNil() {
+	if !reflect.ValueOf(data).IsNil() {
 		resp.Data = data
 	}
 	return resp
