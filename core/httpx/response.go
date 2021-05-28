@@ -1,5 +1,7 @@
 package httpx
 
+import "reflect"
+
 type Response struct {
 	Code    int         `json:"code"`
 	Message string      `json:"message,omitempty"`
@@ -12,7 +14,7 @@ func Ok() *Response {
 
 func OkWithData(data interface{}) *Response {
 	resp := Ok()
-	if data != nil {
+	if data != nil || !reflect.ValueOf(data).IsNil() {
 		resp.Data = data
 	}
 	return resp
