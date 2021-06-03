@@ -74,14 +74,19 @@ func setField(obj interface{}, name string, value interface{}) error {
 	structFieldValue := structValue.FieldByName(name)
 
 	if !structFieldValue.IsValid() {
-		return fmt.Errorf("no such field: %s in obj", name)
+		return nil
 	}
 
 	if !structFieldValue.CanSet() {
 		return fmt.Errorf("cannot set %s field value", name)
 	}
 
+	if value == nil {
+		return nil
+	}
+
 	structFieldType := structFieldValue.Type()
+
 	val := reflect.ValueOf(value)
 
 	var err error
@@ -100,7 +105,13 @@ func typeConversion(value string, t string) (reflect.Value, error) {
 	if t == "string" {
 		return reflect.ValueOf(value), nil
 	} else if t == "time.Time" || t == "Time" {
-		t, err := time.ParseInLocation("2006-01-02 15:04:05", value, time.Local)
+		t, err := time.ParseInLocation(time.RFC3339, value, time.Local)
+		if err != nil {
+			t, err = time.ParseInLocation("2006-01-02 15:04:05", value, time.Local)
+		}
+		if err != nil {
+			t, err = time.ParseInLocation("2006-01-02", value, time.Local)
+		}
 		return reflect.ValueOf(t), err
 	} else if t == "int" {
 		i, err := strconv.Atoi(value)
