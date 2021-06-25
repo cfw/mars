@@ -19,6 +19,7 @@ func NewMemcached(c *Config) *Memcached {
 		client: client,
 	}
 }
+
 func (m *Memcached) Set(key string, value []byte, expire time.Duration) {
 	_ = m.client.Set(&memcache.Item{
 		Key:        key,
@@ -26,6 +27,7 @@ func (m *Memcached) Set(key string, value []byte, expire time.Duration) {
 		Expiration: int32(expire.Seconds())},
 	)
 }
+
 func (m *Memcached) Get(key string) (string, error) {
 	item, err := m.client.Get(key)
 	if err != nil {
