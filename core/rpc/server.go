@@ -14,9 +14,9 @@ import (
 func NewGrpcServer() *grpc.Server {
 	grpcRecoveryOption := []grpc_recovery.Option{
 		grpc_recovery.WithRecoveryHandler(func(p interface{}) (err error) {
-			e := errors.WithStack(errors.New(fmt.Sprintf("%s", p)))
+			e := errors.WithStack(errors.New(fmt.Sprintf("%v", p)))
 			log.Errorf("%+v", e)
-			return status.Errorf(codes.Internal, "%s", p)
+			return status.Errorf(codes.Internal, "%+v", e)
 		}),
 	}
 
