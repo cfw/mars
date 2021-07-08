@@ -113,7 +113,7 @@ func typeConversion(value string, t string) (reflect.Value, error) {
 			t, err = time.ParseInLocation("2006-01-02", value, time.Local)
 		}
 		t = time.Time{}
-		return reflect.ValueOf(t), err
+		return reflect.ValueOf(t), nil
 	} else if t == "int" {
 		i, err := strconv.Atoi(value)
 		return reflect.ValueOf(i), err
