@@ -11,6 +11,11 @@ type Memcached struct {
 
 func NewMemcached(c *Config) *Memcached {
 	client := memcache.New(c.Url())
+	if c.Timeout > 0 {
+		client.Timeout = time.Duration(c.Timeout)
+	} else {
+		client.Timeout = time.Second
+	}
 	err := client.Ping()
 	if err != nil {
 		panic(err)
