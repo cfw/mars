@@ -32,6 +32,11 @@ func NewSql(c *Config) *xorm.Engine {
 	} else {
 		engine.SetMaxOpenConns(1)
 	}
+	if c.MaxIdleTime > 0 {
+		engine.DB().SetConnMaxIdleTime(time.Duration(int64(time.Millisecond) * int64(c.MaxIdleTime)))
+	} else {
+		engine.DB().SetConnMaxIdleTime(time.Second * 30)
+	}
 
 	engine.SetLogger(NewLogCtx(log.StandardLogger()))
 	if c.Debug {

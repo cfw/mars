@@ -12,6 +12,7 @@ type Config struct {
 	Debug       bool   `yaml:"debug"`
 	MaxIdleConn int    `yaml:"maxIdleConn"`
 	MaxOpenConn int    `yaml:"maxOpenConn"`
+	MaxIdleTime int    `yaml:"maxIdleTime"`
 }
 
 func (d *Config) Url() string {

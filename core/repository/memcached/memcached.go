@@ -12,7 +12,7 @@ type Memcached struct {
 func NewMemcached(c *Config) *Memcached {
 	client := memcache.New(c.Url())
 	if c.Timeout > 0 {
-		client.Timeout = time.Duration(c.Timeout)
+		client.Timeout = time.Duration(int64(time.Millisecond) * int64(c.Timeout))
 	} else {
 		client.Timeout = time.Second
 	}
