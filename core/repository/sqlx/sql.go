@@ -22,6 +22,16 @@ func NewSql(c *Config) *xorm.Engine {
 	if err != nil {
 		panic(err)
 	}
+	if c.MaxIdleConn > 0 {
+		engine.SetMaxIdleConns(c.MaxIdleConn)
+	} else {
+		engine.SetMaxIdleConns(1)
+	}
+	if c.MaxOpenConn > 0 {
+		engine.SetMaxIdleConns(c.MaxIdleConn)
+	} else {
+		engine.SetMaxOpenConns(1)
+	}
 
 	engine.SetLogger(NewLogCtx(log.StandardLogger()))
 	if c.Debug {

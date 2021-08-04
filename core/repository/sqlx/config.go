@@ -3,13 +3,15 @@ package sqlx
 import "fmt"
 
 type Config struct {
-	Host     string `yaml:"host"`
-	Port     int    `yaml:"port"`
-	Database string `yaml:"database"`
-	Username string `yaml:"username"`
-	Password string `yaml:"password"`
-	Driver   string `yaml:"driver"`
-	Debug    bool   `yaml:"debug"`
+	Host        string `yaml:"host"`
+	Port        int    `yaml:"port"`
+	Database    string `yaml:"database"`
+	Username    string `yaml:"username"`
+	Password    string `yaml:"password"`
+	Driver      string `yaml:"driver"`
+	Debug       bool   `yaml:"debug"`
+	MaxIdleConn int    `yaml:"maxIdleConn"`
+	MaxOpenConn int    `yaml:"maxOpenConn"`
 }
 
 func (d *Config) Url() string {
