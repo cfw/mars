@@ -6,6 +6,7 @@ type Config struct {
 	Host        string `yaml:"host"`
 	Port        int    `yaml:"port"`
 	Database    int    `yaml:"database"`
+	Password    string `yaml:"password"`
 	PoolSize    int    `yaml:"poolSize"`
 	MinIdleConn int    `yaml:"minIdleConn"`
 }

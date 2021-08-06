@@ -12,6 +12,7 @@ func NewRedis(c *Config) *redis.Client {
 		DB:           c.Database,
 		PoolSize:     c.PoolSize,
 		MinIdleConns: c.MinIdleConn,
+		Password:     c.Password,
 	})
 	log.Info("Connected to Redis")
 	if err := client.Ping(context.TODO()).Err(); err != nil {
