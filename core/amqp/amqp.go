@@ -12,10 +12,14 @@ type Amqp struct {
 	consumeCh *amqplib.Channel
 	produceCh *amqplib.Channel
 	mutex     sync.Mutex
+	close     bool
 }
 
-func (a *Amqp) Consume(queue, consumer string, autoAck, exclusive, noLocal, noWait bool, args amqplib.Table, channelInit ChannelInit, callback Callback) {
+func (a *Amqp) Consume(queue, consumer string, autoAck, exclusive, noLocal, noWait bool, args amqplib.Table, channelInit ChannelSetup, callback Callback) {
 	for {
+		if a.close {
+			return
+		}
 		a.mutex.Lock()
 		err := a.setupConsumeChannel()
 		if err != nil {
@@ -49,6 +53,7 @@ func (a *Amqp) Publish(exchange, key string, mandatory, immediate bool, msg amqp
 }
 
 func (a *Amqp) Close() {
+	a.close = true
 	log.Info("Stopping RabbitMQ")
 	if a.produceCh != nil {
 		_ = a.produceCh.Close()
@@ -138,7 +143,7 @@ func (a *Amqp) connect(url string) error {
 
 type Callback func(delivery amqplib.Delivery)
 
-type ChannelInit func(ch *amqplib.Channel)
+type ChannelSetup func(ch *amqplib.Channel)
 
 func NewAmqp(c *Config) *Amqp {
 	instance := &Amqp{}
